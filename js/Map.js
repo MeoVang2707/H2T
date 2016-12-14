@@ -38,7 +38,7 @@ class Map {
           continue;
         }
         var x= Math.random()*10 + 1;
-        if (x < 1.1){
+        if (x < 1.7){
           var enemy = new Enemy(48*j, 48*i);
           if (j % 2 ==0){
             enemy.sprite.body.velocity.setTo(50,0);
