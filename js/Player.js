@@ -2,8 +2,8 @@ class Player {
   constructor(x, y, configs) {
     this.configs = configs;
     this.sprite = Nakama.playerGroup.create(48,48, "player");
-    this.sprite.health = 1;
-    this.sprite.body.setCircle(24, 0, 0);
+    this.sprite.health = 3;
+    this.sprite.body.setCircle(22, 0, 0);
     this.sprite.animations.add('down', [0,1,2,3], 10, true);
     this.sprite.animations.add('left', [4,5,6,7], 10, true);
     this.sprite.animations.add('up', [8,9,10,11], 10, true);

@@ -34,8 +34,13 @@ var preload = function(){
 
 var number;
 var numberText = 0;
+var health;
+var healthText;
 // var treasure;
-var stateText;
+var endText;
+var timeSuper = 0;
+var enemyArray= [];
+// var player1;
 
 var create = function(){
   Nakama.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -70,9 +75,11 @@ var create = function(){
   });
   Nakama.players.push(player1);
 
-  stateText = Nakama.game.add.text(Nakama.game.world.centerX,Nakama.game.world.centerY,' ', { font: '84px Arial', fill: 'white' });
-  stateText.anchor.setTo(0.5, 0.5);
-  stateText.visible = false;
+  health = player1.sprite.health;
+  healthText = Nakama.game.add.text(220, 12, 'Health:' + health, { fontSize: '32px', fill: 'red' });
+  endText = Nakama.game.add.text(Nakama.game.world.centerX,Nakama.game.world.centerY,' ', { font: '84px Arial', fill: 'red' });
+  endText.anchor.setTo(0.5, 0.5);
+  endText.visible = false;
 
 }
 
@@ -85,6 +92,7 @@ var update = function(){
   Nakama.game.physics.arcade.collide(Nakama.enemyGroup, Nakama.treasures);
   Nakama.game.physics.arcade.collide(Nakama.playerGroup, Nakama.treasures);
 
+  timeSuper += Nakama.game.time.physicsElapsed;
 
   for (var i = 0; i<Nakama.players.length; i++){
     Nakama.players[i].update();
@@ -102,11 +110,24 @@ var update = function(){
     Nakama.enemys[i].update();
   }
 
+
+  health = player1.sprite.health;
+  if ( health ==0 ){
+    endText.text=" You loss \n Enter to restart";
+    endText.visible = true;
+    if(Nakama.keyboard.isDown(Phaser.Keyboard.ENTER)){
+      create();
+    }
+  }
+  healthText.text = 'Health: ' + health;
+
+  if (timeSuper >= 1){
+    Nakama.game.physics.arcade.overlap(Nakama.playerGroup, Nakama.enemyGroup, onPlayerHitEnemy);
+    Nakama.game.physics.arcade.overlap(Nakama.bulletEnemyGroup, Nakama.playerGroup, onBulletHitPlayer);
+    Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.playerGroup, onBulletHitPlayer);
+  }
   Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.platforms, onBulletHitActor);
-  Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.playerGroup, onBulletHitPlayer);
   Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.enemyGroup, onBulletHitEnemy);
-  Nakama.game.physics.arcade.overlap(Nakama.playerGroup, Nakama.enemyGroup, onPlayerHitEnemy);
-  Nakama.game.physics.arcade.overlap(Nakama.bulletEnemyGroup, Nakama.playerGroup, onBulletHitPlayer);
   Nakama.game.physics.arcade.overlap(Nakama.bulletEnemyGroup, Nakama.platforms, onBulletHitActor);
   Nakama.game.physics.arcade.overlap(Nakama.playerGroup, Nakama.treasures, onPlayerHitTreasures);
 }
@@ -118,8 +139,9 @@ function onBulletHitActor(bulletSprite, actorSprite){
 
 function onPlayerHitEnemy(playerSprite, enemySprite){
   playerSprite.damage(enemySprite.power);
-  stateText.text=" You loss \n Press F5 to restart";
-  stateText.visible = true;
+  if (playerSprite.health != 0){
+    randomPosition(playerSprite);
+  }
 }
 
 function onBulletHitEnemy(bulletSprite, enemySprite){
@@ -132,21 +154,33 @@ function onBulletHitEnemy(bulletSprite, enemySprite){
 
 function onPlayerHitTreasures(playerSprite, treasureSprite) {
   if (number == 0){
-    stateText.text=" You win \n Press F5 to restart";
-    stateText.visible = true;
+    endText.text=" You win \n Enter to restart";
+    endText.visible = true;
+    if(Nakama.keyboard.isDown(Phaser.Keyboard.ENTER)){
+      create();
+    }
   }
 }
 
 function onBulletHitPlayer(bulletSprite, playerSprite){
   playerSprite.damage(bulletSprite.power);
   bulletSprite.kill();
-  stateText.text=" You loss \n Press F5 to restart";
-  stateText.visible = true;
+  if (playerSprite.health != 0){
+    randomPosition(playerSprite);
+  }
+}
+
+function randomPosition(playerSprite){
+  var i = Math.floor(Math.random()*enemyArray.length + 1);
+  var a = enemyArray[i];
+  playerSprite.position.x = 48 * a[1];
+  playerSprite.position.y = 48 * a[0];
+  timeSuper = 0;
 }
 
 var render = function(){
   // Nakama.playerGroup.forEachAlive(function(sprite){
-  //   Nakama.game.debug.body(sprite);
+  //   Nakama.game.debug.bodysprite);
   // });
   // Nakama.bombGroup.forEachAlive(function(sprite){
   //   Nakama.game.debug.body(sprite);
