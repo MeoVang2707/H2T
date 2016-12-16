@@ -1,8 +1,7 @@
 var Nakama = {};
 Nakama.Configs = {
-    BULLET_SPEED : 200
+    BULLET_SPEED : 20
 }
-
 window.onload = function(){
   Nakama.game = new Phaser.Game(1008, 720, Phaser.AUTO, '',{
       preload: preload,
@@ -206,12 +205,12 @@ var render = function(){
   // Nakama.bombGroup.forEachAlive(function(sprite){
   //   Nakama.game.debug.body(sprite);
   // });
-  // Nakama.bulletGroup.forEachAlive(function(sprite){
-  //   Nakama.game.debug.body(sprite);
-  // });
-  // Nakama.platforms.forEachAlive(function(sprite){
-  //   Nakama.game.debug.body(sprite);
-  // });
+  Nakama.bulletGroup.forEachAlive(function(sprite){
+    Nakama.game.debug.body(sprite);
+  });
+  Nakama.platforms.forEachAlive(function(sprite){
+    Nakama.game.debug.body(sprite);
+  });
   // Nakama.enemyGroup.forEachAlive(function(sprite){
   //   Nakama.game.debug.body(sprite);
   // });

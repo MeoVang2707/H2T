@@ -4,9 +4,11 @@ class Map {
     for (var i=0; i < 15; i++){
       var wall = Nakama.platforms.create(0, i*48, 'wall');
       wall.body.immovable = true;
+      wall.body.setCircle(23, 1, 1);
       wall.health = 9999999;
       wall = Nakama.platforms.create(960, i*48, 'wall');
       wall.body.immovable = true;
+      wall.body.setCircle(23, 1, 1);
       wall.health = 9999999;
     }
     for (var i=0; i < 21; i++){
@@ -15,6 +17,7 @@ class Map {
       wall.health = 9999999;
       wall = Nakama.platforms.create(i*48, 672, 'wall');
       wall.body.immovable = true;
+      wall.body.setCircle(23, 1, 1);
       wall.health = 9999999;
     }
     for (var i=2; i <13; i +=2 ){

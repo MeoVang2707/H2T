@@ -24,8 +24,8 @@ class Bomb {
 
   bullet(){
     var bullet1 = new BulletRight(this.sprite.position.x + 60, this.sprite.position.y + 7, {speedX: Nakama.Configs.BULLET_SPEED, speedY: 0});
-    var bullet2 = new BulletLeft(this.sprite.position.x - 10, this.sprite.position.y + 40,{speedX: -Nakama.Configs.BULLET_SPEED, speedY: 0});
-    var bullet3 = new BulletDown(this.sprite.position.x + 35, this.sprite.position.y + 65,{speedX: 0, speedY: Nakama.Configs.BULLET_SPEED});
-    var bullet4 = new BulletUp(this.sprite.position.x, this.sprite.position.y -20,{speedX: 0, speedY: -Nakama.Configs.BULLET_SPEED});
+    var bullet2 = new BulletLeft(this.sprite.position.x - 10, this.sprite.position.y + 43,{speedX: -Nakama.Configs.BULLET_SPEED, speedY: 0});
+    var bullet3 = new BulletDown(this.sprite.position.x + 45, this.sprite.position.y + 65,{speedX: 0, speedY: Nakama.Configs.BULLET_SPEED});
+    var bullet4 = new BulletUp(this.sprite.position.x + 5, this.sprite.position.y -20,{speedX: 0, speedY: -Nakama.Configs.BULLET_SPEED});
   }
 }
