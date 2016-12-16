@@ -27,6 +27,7 @@ var preload = function(){
   Nakama.game.load.spritesheet('enemy', 'Assets/george.png', 48, 48);
   Nakama.game.load.spritesheet('player', 'Assets/betty.png', 48, 48);
   Nakama.game.load.image('stone', 'Assets/stone.png');
+  Nakama.game.load.image('itemBullet', 'Assets/itemBullet.jpg');
   Nakama.game.load.image('treasure', 'Assets/treasure.png');
   Nakama.game.time.advancedTiming = true;
   Nakama.game.load.image('bomb', 'Assets/bomb.png');
@@ -36,11 +37,11 @@ var number;
 var numberText = 0;
 var health;
 var healthText;
-// var treasure;
 var endText;
 var timeSuper = 0;
 var enemyArray= [];
-// var player1;
+var stoneArray = [];
+var eatIteam = false;
 
 var create = function(){
   Nakama.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -48,6 +49,7 @@ var create = function(){
 
   Nakama.game.add.sprite(0, 0, "background");
 
+  Nakama.itemGroup = Nakama.game.add.physicsGroup();
   Nakama.platforms = Nakama.game.add.physicsGroup();
   Nakama.treasures = Nakama.game.add.physicsGroup();
   Nakama.bombGroup = Nakama.game.add.physicsGroup();
@@ -60,8 +62,13 @@ var create = function(){
   Nakama.bombsPlayer = [];
   Nakama.bombsEnemy = [];
   Nakama.enemys = [];
+  Nakama.items = [];
 
   var map1 = new Map();
+
+  var i = Math.floor(Math.random()*stoneArray.length + 1);
+  var a = stoneArray[i];
+  itemBullet = Nakama.itemGroup.create(48 * a[1], 48 * a[0], 'itemBullet');
 
   number = Nakama.enemys.length;
   numberText = Nakama.game.add.text(12, 12, 'Enemys:' + number, { fontSize: '32px', fill: '#000' });
@@ -130,6 +137,20 @@ var update = function(){
   Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.enemyGroup, onBulletHitEnemy);
   Nakama.game.physics.arcade.overlap(Nakama.bulletEnemyGroup, Nakama.platforms, onBulletHitActor);
   Nakama.game.physics.arcade.overlap(Nakama.playerGroup, Nakama.treasures, onPlayerHitTreasures);
+  Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.bombEnemyGroup, onBulletHitBomb);
+  Nakama.game.physics.arcade.overlap(Nakama.bulletEnemyGroup, Nakama.bombEnemyGroup, onBulletHitBomb);
+  Nakama.game.physics.arcade.overlap(Nakama.playerGroup, Nakama.itemGroup, onPlayerHitItem);
+  Nakama.game.physics.arcade.overlap(Nakama.bulletEnemyGroup, Nakama.bombGroup, onBulletHitBomb);
+}
+
+function onPlayerHitItem(playerSprite, itemSprite){
+  itemSprite.kill();
+  eatIteam = true;
+}
+
+function onBulletHitBomb(bulletSprite, bombSprite){
+  bulletSprite.kill();
+  bombSprite.bombbumb = true;
 }
 
 function onBulletHitActor(bulletSprite, actorSprite){

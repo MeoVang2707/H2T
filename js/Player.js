@@ -2,7 +2,7 @@ class Player {
   constructor(x, y, configs) {
     this.configs = configs;
     this.sprite = Nakama.playerGroup.create(48,48, "player");
-    this.sprite.health = 3;
+    this.sprite.health = 1000;
     this.sprite.body.setCircle(22, 0, 0);
     this.sprite.animations.add('down', [0,1,2,3], 10, true);
     this.sprite.animations.add('left', [4,5,6,7], 10, true);
@@ -38,7 +38,7 @@ class Player {
 
     this.deltaBombx = this.sprite.position.x % 48;
     this.deltaBomby = this.sprite.position.y % 48;
-    if ((this.deltaBombx < 5 || this.deltaBombx >43) && (this.deltaBomby < 5 || this.deltaBomby > 43)){
+    if ((this.deltaBombx < 20 || this.deltaBombx >25) && (this.deltaBomby < 20 || this.deltaBomby > 25)){
       this.deltaBomb = true;
     }
     else this.deltaBomb = false;
@@ -49,6 +49,17 @@ class Player {
   }
 
   fire(){
-    var bomb = new Bomb(this.sprite.position);
+    if(this.deltaBombx < 20 && this.deltaBomby < 20){
+      var bomb = new Bomb(this.sprite.position.x - this.deltaBombx, this.sprite.position.y - this.deltaBomby );
+    }
+    else if(this.deltaBombx < 20 && this.deltaBomby > 25){
+      var bomb = new Bomb(this.sprite.position.x - this.deltaBombx, this.sprite.position.y + 48 - this.deltaBomby );
+    }
+    else if(this.deltaBombx > 20 && this.deltaBomby < 25){
+      var bomb = new Bomb(this.sprite.position.x + 48 - this.deltaBombx, this.sprite.position.y - this.deltaBomby );
+    }
+    else if(this.deltaBombx > 20 && this.deltaBomby > 25){
+      var bomb = new Bomb(this.sprite.position.x + 48 - this.deltaBombx, this.sprite.position.y + 48 - this.deltaBomby );
+    }
   }
 }

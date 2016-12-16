@@ -53,6 +53,8 @@ class Map {
           continue;
         }
         else {
+          toado = [i, j];
+          stoneArray.push(toado);
           var stone = Nakama.platforms.create(48*j, 48*i, 'stone');
           stone.health = 1;
           stone.body.immovable = true;
