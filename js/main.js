@@ -121,7 +121,7 @@ var update = function(){
   }
   healthText.text = 'Health: ' + health;
 
-  if (timeSuper >= 1){
+  if (timeSuper >= 3){
     Nakama.game.physics.arcade.overlap(Nakama.playerGroup, Nakama.enemyGroup, onPlayerHitEnemy);
     Nakama.game.physics.arcade.overlap(Nakama.bulletEnemyGroup, Nakama.playerGroup, onBulletHitPlayer);
     Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.playerGroup, onBulletHitPlayer);
