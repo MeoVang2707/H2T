@@ -3,26 +3,28 @@ class Map {
     // create wall
     for (var i=0; i < 15; i++){
       var wall = Nakama.platforms.create(0, i*48, 'wall');
+      // wall.body.setCircle(23, 0, 0);
       wall.body.immovable = true;
-      wall.body.setCircle(23, 1, 1);
       wall.health = 9999999;
       wall = Nakama.platforms.create(960, i*48, 'wall');
+      // wall.body.setCircle(23, 0, 0);
       wall.body.immovable = true;
-      wall.body.setCircle(23, 1, 1);
       wall.health = 9999999;
     }
     for (var i=0; i < 21; i++){
       var wall = Nakama.platforms.create(i*48, 0, 'wall');
+      // wall.body.setCircle(23, 0, 0);
       wall.body.immovable = true;
       wall.health = 9999999;
       wall = Nakama.platforms.create(i*48, 672, 'wall');
+      // wall.body.setCircle(23, 0, 0);
       wall.body.immovable = true;
-      wall.body.setCircle(23, 1, 1);
       wall.health = 9999999;
     }
     for (var i=2; i <13; i +=2 ){
       for(var j=2; j <19; j +=2 ){
         var wall = Nakama.platforms.create(j*48, i*48, 'wall');
+        // wall.body.setCircle(23, 0, 0);
         wall.body.immovable = true;
         wall.health = 9999999;
       }
@@ -59,6 +61,7 @@ class Map {
           toado = [i, j];
           stoneArray.push(toado);
           var stone = Nakama.platforms.create(48*j, 48*i, 'stone');
+          wall.body.setCircle(23, 0, 0);
           stone.health = 1;
           stone.body.immovable = true;
         }

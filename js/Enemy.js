@@ -29,5 +29,17 @@ class Enemy {
       var bomb = new BombEnemy(this.sprite.position);
       this.timeStart =0;
     }
+    if (this.sprite.body.velocity.x > 0){
+      this.sprite.animations.play('right');
+    }
+    else if (this.sprite.body.velocity.x < 0) {
+      this.sprite.animations.play('left');
+    }
+    if (this.sprite.body.velocity.y > 0){
+      this.sprite.animations.play('down');
+    }
+    else if (this.sprite.body.velocity.y < 0) {
+      this.sprite.animations.play('up');
+    }
   }
 }
