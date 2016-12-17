@@ -14,9 +14,17 @@ class Enemy {
     Nakama.enemys.push(this);
     this.sprite.body.velocity.setTo(0, 50);
     this.timeStart = 0;
+    this.timeInvisible = 0;
   }
 
   update(){
+    this.timeInvisible += Nakama.game.time.physicsElapsed;
+    if(this.timeInvisible > 5){
+      this.sprite.alpha = 0;
+      Nakama.game.add.tween(this.sprite).to( { alpha: 1 }, 5000, "Linear", true);
+      this.timeInvisible = 0;
+    }
+
     this.timeStart += Nakama.game.time.physicsElapsed;
     this.deltaBombx = this.sprite.position.x % 48;
     this.deltaBomby = this.sprite.position.y % 48;

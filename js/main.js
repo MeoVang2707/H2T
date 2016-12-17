@@ -1,6 +1,6 @@
 var Nakama = {};
 Nakama.Configs = {
-    BULLET_SPEED : 200
+  BULLET_SPEED : 100
 }
 
 window.onload = function(){
@@ -33,9 +33,10 @@ var preload = function(){
   Nakama.game.load.image('bomb', 'Assets/bomb.png');
   Nakama.game.load.image('itemBoot', 'Assets/itemBoot.jpg');
   Nakama.game.load.image('itemBomb', 'Assets/itemBomb.jpg');
+  Nakama.game.load.image('stoneForever', 'Assets/stoneForever.jpg');
 }
 
-var numberBomb =1;
+var numberBomb = 0;
 var number;
 var numberText = 0;
 var health;
@@ -43,7 +44,7 @@ var healthText;
 var endText;
 var timeSuper = 0;
 var enemyArray= [];
-var stoneArray = [];
+// var stoneArray = [];
 var eatIteam = false;
 var eatBoot = false;
 var eatBomb = false;
@@ -66,25 +67,27 @@ var create = function(){
   Nakama.bulletGroup = Nakama.game.add.physicsGroup();
   Nakama.bulletEnemyGroup = Nakama.game.add.physicsGroup();
   Nakama.enemyGroup = Nakama.game.add.physicsGroup();
+  Nakama.enemy2Group = Nakama.game.add.physicsGroup();
   Nakama.playerGroup = Nakama.game.add.physicsGroup();
   Nakama.players = [];
   Nakama.bombsPlayer = [];
   Nakama.bombsEnemy = [];
   Nakama.enemys = [];
   Nakama.items = [];
+  Nakama.stoneArray = [];
 
   var map1 = new Map();
 
-  var i = Math.floor(Math.random()*stoneArray.length + 1);
-  var a = stoneArray[i];
+  var i = Math.floor(Math.random()*Nakama.stoneArray.length);
+  var a = Nakama.stoneArray[i];
   itemBullet = Nakama.itemGroup.create(48 * a[1], 48 * a[0], 'itemBullet');
 
-  var i = Math.floor(Math.random()*stoneArray.length + 1);
-  var a = stoneArray[i];
+  var i = Math.floor(Math.random()*Nakama.stoneArray.length);
+  var a = Nakama.stoneArray[i];
   itemBoot = Nakama.itemBootGroup.create(48 * a[1], 48 * a[0], 'itemBoot');
 
-  var i = Math.floor(Math.random()*stoneArray.length + 1);
-  var a = stoneArray[i];
+  var i = Math.floor(Math.random()*Nakama.stoneArray.length);
+  var a = Nakama.stoneArray[i];
   itemBomb = Nakama.itemBombGroup.create(48 * a[1], 48 * a[0], 'itemBomb');
 
   number = Nakama.enemys.length;
@@ -150,6 +153,7 @@ var update = function(){
     Nakama.game.physics.arcade.overlap(Nakama.playerGroup, Nakama.enemyGroup, onPlayerHitEnemy);
     Nakama.game.physics.arcade.overlap(Nakama.bulletEnemyGroup, Nakama.playerGroup, onBulletHitPlayer);
     Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.playerGroup, onBulletHitPlayer);
+    Nakama.game.physics.arcade.overlap(Nakama.playerGroup, Nakama.enemy2Group, onPlayerHitEnemy);
   }
   else {
     Nakama.players[0].sprite.tint = 0xff00ff;
@@ -160,6 +164,7 @@ var update = function(){
   }
   Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.platforms, onBulletHitActor);
   Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.enemyGroup, onBulletHitEnemy);
+  Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.enemy2Group, onBulletHitEnemy);
   Nakama.game.physics.arcade.overlap(Nakama.bulletEnemyGroup, Nakama.platforms, onBulletHitActor);
   Nakama.game.physics.arcade.overlap(Nakama.playerGroup, Nakama.treasures, onPlayerHitTreasures);
   Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.bombEnemyGroup, onBulletHitBomb);
@@ -168,6 +173,8 @@ var update = function(){
   Nakama.game.physics.arcade.overlap(Nakama.bulletEnemyGroup, Nakama.bombGroup, onBulletHitBomb);
   Nakama.game.physics.arcade.overlap(Nakama.playerGroup, Nakama.itemBootGroup, onPlayerHitItemBoot);
   Nakama.game.physics.arcade.overlap(Nakama.playerGroup, Nakama.itemBombGroup, onPlayerHitItemBomb);
+  Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.bombGroup, onBulletHitBomb);
+  Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.bombEnemyGroup, onBulletHitBomb);
 }
 
 function onPlayerHitItemBomb(playerSprite, itemSprite){
@@ -203,7 +210,6 @@ function onPlayerHitEnemy(playerSprite, enemySprite){
 }
 
 function onBulletHitEnemy(bulletSprite, enemySprite){
-  // Nakama.enemys.splice(Nakama.enemys.indexOf(enemySprite), 1);
   enemySprite.kill();
   bulletSprite.kill();
   number = number - 1;
@@ -225,21 +231,14 @@ function onBulletHitPlayer(bulletSprite, playerSprite){
   bulletSprite.kill();
   if (playerSprite.health != 0){
     randomPosition(playerSprite);
-    // Nakama.game.time.events.loop(Phaser.Timer.SECOND * 0.1, changeTint, this);
-    // for (var i = 0; i <5; i++) {
-    //   playerSprite.tint = 0xff00ff;
-    // }
-
-    // playerSprite.alpha = 0.1;
-    // var tween = Nakama.game.add.tween(playerSprite).to( { alpha: 1 }, 20, "Linear", true, 20);
   }
 }
 
 function randomPosition(playerSprite){
-  var i = Math.floor(Math.random()*enemyArray.length + 1);
+  var i = Math.floor(Math.random()*enemyArray.length);
   var a = enemyArray[i];
-  playerSprite.position.x = 48 * a[1];
-  playerSprite.position.y = 48 * a[0];
+  playerSprite.position.x = a[0];
+  playerSprite.position.y = a[1];
   timeSuper = 0;
 }
 

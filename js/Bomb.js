@@ -1,8 +1,9 @@
 class Bomb {
   constructor(x, y) {
-    this.sprite = Nakama.bombGroup.create(x, y, "bomb");
+    this.sprite = Nakama.bombGroup.create(x+ 5, y, "bomb");
     Nakama.bombsPlayer.push(this);
     this.sprite.bombbumb = false;
+    numberBomb += 1;
     this.timeStart = 0;
     this.deltaTime = 0;
     this.sprite.body.immovable = true;
@@ -10,6 +11,7 @@ class Bomb {
   update(){
     this.timeStart += Nakama.game.time.physicsElapsed;
     if(this.timeStart > 1.5 || this.sprite.bombbumb){
+      numberBomb -= 1;
       this.sprite.kill();
       Nakama.bombsPlayer.splice(Nakama.bombsPlayer.indexOf(this), 1);
       this.bullet();

@@ -3,12 +3,14 @@ class Player {
     this.configs = configs;
     this.sprite = Nakama.playerGroup.create(48,48, "player");
     this.sprite.health = 1000;
+    this.sprite.body.collideWorldBounds = true;
     this.sprite.body.setCircle(24, 0.5, 0.5);
     this.sprite.animations.add('down', [0,1,2,3], 10, true);
     this.sprite.animations.add('left', [4,5,6,7], 10, true);
     this.sprite.animations.add('up', [8,9,10,11], 10, true);
     this.sprite.animations.add('right', [12,13,14,15], 10, true);
     this.sprite.animations.add('die', [16], 10, true);
+    this.deltaTime = 0;
   }
 
   update(){
@@ -46,16 +48,15 @@ class Player {
     }
     else this.deltaBomb = false;
 
+    this.deltaTime += Nakama.game.time.physicsElapsed;
     if (eatBomb == true){
-      console.log('aaaaa');
-      if ((Nakama.keyboard.isDown(this.configs.fire)) && Nakama.bombsPlayer.length <= 6 && this.deltaBomb) {
-        console.log('b');
+      if (Nakama.keyboard.isDown(this.configs.fire) && numberBomb <= 1 && this.deltaBomb && this.deltaTime > 0.3) {
         this.fire();
+        this.deltaTime = 0;
       }
     }
     else {
-      if (Nakama.keyboard.isDown(this.configs.fire) && Nakama.bombsPlayer.length == 0 && this.deltaBomb) {
-        console.log('c');
+      if (Nakama.keyboard.isDown(this.configs.fire) && numberBomb == 0 && this.deltaBomb) {
         this.fire();
       }
     }
