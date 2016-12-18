@@ -2,7 +2,7 @@ class Player {
   constructor(x, y, configs) {
     this.configs = configs;
     this.sprite = Nakama.playerGroup.create(48,48, "player");
-    this.sprite.health = 1000;
+    this.sprite.health = 5;
     this.sprite.body.collideWorldBounds = true;
     this.sprite.body.setCircle(24, 0.5, 0.5);
     this.sprite.animations.add('down', [0,1,2,3], 10, true);
@@ -14,27 +14,34 @@ class Player {
   }
 
   update(){
-    if (eatBoot == true){
+    if (Nakama.eatBoot == true){
       playerSpeed = 200;
+    }
+    else {
+      playerSpeed = 100;
     }
     if(Nakama.keyboard.isDown(this.configs.up)){
       this.sprite.body.velocity.y = -playerSpeed;
-      this.sprite.animations.play('up')
+      this.sprite.animations.play('up');
+      beginText.visible = false;
     }
     else if(Nakama.keyboard.isDown(this.configs.down)){
       this.sprite.body.velocity.y = playerSpeed;
-      this.sprite.animations.play('down')
+      this.sprite.animations.play('down');
+      beginText.visible = false;
     }
     else{
       this.sprite.body.velocity.y = 0;
     }
     if(Nakama.keyboard.isDown(this.configs.left)){
       this.sprite.body.velocity.x = -playerSpeed;
-      this.sprite.animations.play('left')
+      this.sprite.animations.play('left');
+      beginText.visible = false;
     }
     else if(Nakama.keyboard.isDown(this.configs.right)){
       this.sprite.body.velocity.x = playerSpeed;
-      this.sprite.animations.play('right')
+      this.sprite.animations.play('right');
+      beginText.visible = false;
     }
     else{
       this.sprite.body.velocity.x = 0;
@@ -49,7 +56,7 @@ class Player {
     else this.deltaBomb = false;
 
     this.deltaTime += Nakama.game.time.physicsElapsed;
-    if (eatBomb == true){
+    if (Nakama.eatBomb == true){
       if (Nakama.keyboard.isDown(this.configs.fire) && numberBomb <= 1 && this.deltaBomb && this.deltaTime > 0.3) {
         this.fire();
         this.deltaTime = 0;

@@ -34,8 +34,8 @@ var preload = function(){
   Nakama.game.load.image('itemBoot', 'Assets/itemBoot.jpg');
   Nakama.game.load.image('itemBomb', 'Assets/itemBomb.jpg');
   Nakama.game.load.image('stoneForever', 'Assets/stoneForever.jpg');
+  Nakama.game.load.audio('boden', ['assets/Audio/FaceTheWind.mp3', 'assets/Audio/FaceTheWind.ogg']);
 }
-
 var numberBomb = 0;
 var number;
 var numberText = 0;
@@ -44,12 +44,11 @@ var healthText;
 var endText;
 var timeSuper = 0;
 var enemyArray= [];
-// var stoneArray = [];
-var eatIteam = false;
-var eatBoot = false;
-var eatBomb = false;
 var playerSpeed = 100;
 var timeLight = 0;
+var beginText;
+var background;
+var clap;
 
 var create = function(){
   Nakama.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -75,20 +74,36 @@ var create = function(){
   Nakama.enemys = [];
   Nakama.items = [];
   Nakama.stoneArray = [];
+  Nakama.eatIteam = false;
+  Nakama.eatBoot = false;
+  Nakama.eatBomb = false;
+
+  beginText = Nakama.game.add.text(Nakama.game.world.centerX,Nakama.game.world.centerY,' ', { font: '64px Arial', fill: 'red' });
+  beginText.text = 'Alive and kill all enemys to win! \n Goodluck!'
+  beginText.anchor.setTo(0.5, 0.5);
+  beginText.visible = true;
+
 
   var map1 = new Map();
+  Nakama.game.input.touch.preventDefault = false;
+  var music = Nakama.game.add.audio('boden');
+  music.play();
+
 
   var i = Math.floor(Math.random()*Nakama.stoneArray.length);
   var a = Nakama.stoneArray[i];
   itemBullet = Nakama.itemGroup.create(48 * a[1], 48 * a[0], 'itemBullet');
+  itemBullet.body.setSize(20, 20, 13,13);
 
   var i = Math.floor(Math.random()*Nakama.stoneArray.length);
   var a = Nakama.stoneArray[i];
   itemBoot = Nakama.itemBootGroup.create(48 * a[1], 48 * a[0], 'itemBoot');
+  itemBoot.body.setSize(20, 20, 13,13);
 
   var i = Math.floor(Math.random()*Nakama.stoneArray.length);
   var a = Nakama.stoneArray[i];
   itemBomb = Nakama.itemBombGroup.create(48 * a[1], 48 * a[0], 'itemBomb');
+  itemBomb.body.setSize(20, 20, 13,13);
 
   number = Nakama.enemys.length;
   numberText = Nakama.game.add.text(12, 12, 'Enemys:' + number, { fontSize: '32px', fill: '#000' });
@@ -104,6 +119,7 @@ var create = function(){
 
   health = player1.sprite.health;
   healthText = Nakama.game.add.text(220, 12, 'Health:' + health, { fontSize: '32px', fill: 'red' });
+
   endText = Nakama.game.add.text(Nakama.game.world.centerX,Nakama.game.world.centerY,' ', { font: '84px Arial', fill: 'red' });
   endText.anchor.setTo(0.5, 0.5);
   endText.visible = false;
@@ -139,12 +155,18 @@ var update = function(){
   }
 
 
+  if(Nakama.keyboard.isDown(Phaser.Keyboard.S)){
+    beginText.visible = false;
+  }
+
+
   health = player1.sprite.health;
   if ( health ==0 ){
     endText.text=" You loss \n Enter to restart";
     endText.visible = true;
     if(Nakama.keyboard.isDown(Phaser.Keyboard.ENTER)){
       create();
+
     }
   }
   healthText.text = 'Health: ' + health;
@@ -179,17 +201,17 @@ var update = function(){
 
 function onPlayerHitItemBomb(playerSprite, itemSprite){
   itemSprite.kill();
-  eatBomb = true;
+  Nakama.eatBomb = true;
 }
 
 function onPlayerHitItemBoot(playerSprite, itemSprite){
   itemSprite.kill();
-  eatBoot = true;
+  Nakama.eatBoot = true;
 }
 
 function onPlayerHitItem(playerSprite, itemSprite){
   itemSprite.kill();
-  eatIteam = true;
+  Nakama.eatIteam = true;
 }
 
 function onBulletHitBomb(bulletSprite, bombSprite){
@@ -256,6 +278,15 @@ var render = function(){
   //   Nakama.game.debug.body(sprite);
   // });
   // Nakama.enemyGroup.forEachAlive(function(sprite){
+  //   Nakama.game.debug.body(sprite);
+  // });
+  // Nakama.itemGroup.forEachAlive(function(sprite){
+  //   Nakama.game.debug.body(sprite);
+  // });
+  // Nakama.itemBombGroup.forEachAlive(function(sprite){
+  //   Nakama.game.debug.body(sprite);
+  // });
+  // Nakama.itemBootGroup.forEachAlive(function(sprite){
   //   Nakama.game.debug.body(sprite);
   // });
 }

@@ -15,7 +15,7 @@ class Bomb {
       this.sprite.kill();
       Nakama.bombsPlayer.splice(Nakama.bombsPlayer.indexOf(this), 1);
       this.bullet();
-      if (eatIteam == true){
+      if (Nakama.eatIteam == true){
         setTimeout(function(){
           this.bullet();
         }.bind(this), 200);
